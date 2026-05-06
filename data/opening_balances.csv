@@ -1,0 +1,7 @@
+account_name,account_type,opening_debit_balance,opening_credit_balance,period_start_date
+Cash,asset,10000,0,2024-01-01
+Capital,capital,0,10000,2024-01-01
+Sales,revenue,0,0,2024-01-01
+Rent Expense,expense,0,0,2024-01-01
+Equipment,asset,0,0,2024-01-01
+Accounts Payable,liability,0,0,2024-01-01
