@@ -32,15 +32,10 @@ streamlit run financial_accounting_engine/app/streamlit_app.py
 ## Test
 
 ```bash
-python -m venv .venv
-source .venv/bin/activate
-python -m pip install -r requirements.txt
-pytest -q
+pytest
 ruff check .
 mypy financial_accounting_engine
 ```
-
-If dependency installation is blocked by the execution environment, `pytest` cannot collect because pandas is a required runtime dependency. In that case, run `ruff check .`, `mypy financial_accounting_engine`, and `python -m compileall -q financial_accounting_engine tests` in the restricted environment, then run `pytest -q` in a local or CI environment with dependencies installed.
 
 ## Accounting and analysis concepts covered
 
