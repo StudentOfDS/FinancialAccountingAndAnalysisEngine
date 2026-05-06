@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-from typing import Any
-
 import pandas as pd
 
 from financial_accounting_engine.analysis.dupont import dupont_analysis
@@ -23,7 +21,10 @@ def detect_red_flags(df: pd.DataFrame) -> list[dict[str, str]]:
             prev = df.iloc[i - 1]
             if row.revenue > prev.revenue and row.net_profit < prev.net_profit:
                 flags.append(_flag(period, "Revenue up but net profit down", "Margins or expenses deteriorated"))
-            flags.extend(_margin_comparison_flags(row, prev, period))
+            if row.operating_expenses / row.revenue > prev.operating_expenses / prev.revenue:
+                flags.append(_flag(period, "Expenses growing faster than revenue", "Cost control issue"))
+            if row.gross_profit / row.revenue < prev.gross_profit / prev.revenue:
+                flags.append(_flag(period, "Declining gross margin", "Pricing or COGS pressure"))
             if row.closing_cash < prev.closing_cash:
                 flags.append(_flag(period, "Falling closing cash", "Cash balance declined"))
         if not pivot.empty and period in pivot.index:
@@ -35,22 +36,6 @@ def detect_red_flags(df: pd.DataFrame) -> list[dict[str, str]]:
         dup_row = dup[dup.period == period]
         if not dup_row.empty and dup_row.iloc[0].warning:
             flags.append(_flag(period, "ROE rising only from leverage", dup_row.iloc[0].warning))
-    return flags
-
-
-def _margin_comparison_flags(row: Any, previous_row: pd.Series, period: str) -> list[dict[str, str]]:
-    if float(row.revenue) == 0 or float(previous_row.revenue) == 0:
-        return [_flag(period, "Zero revenue margin comparison skipped", "Expense ratio and gross margin comparisons require non-zero current and previous revenue.")]
-
-    flags: list[dict[str, str]] = []
-    current_expense_ratio = float(row.operating_expenses) / float(row.revenue)
-    previous_expense_ratio = float(previous_row.operating_expenses) / float(previous_row.revenue)
-    current_gross_margin = float(row.gross_profit) / float(row.revenue)
-    previous_gross_margin = float(previous_row.gross_profit) / float(previous_row.revenue)
-    if current_expense_ratio > previous_expense_ratio:
-        flags.append(_flag(period, "Expenses growing faster than revenue", "Cost control issue"))
-    if current_gross_margin < previous_gross_margin:
-        flags.append(_flag(period, "Declining gross margin", "Pricing or COGS pressure"))
     return flags
 
 

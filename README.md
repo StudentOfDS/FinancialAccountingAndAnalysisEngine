@@ -31,26 +31,11 @@ streamlit run financial_accounting_engine/app/streamlit_app.py
 
 ## Test
 
-Local or CI environment with dependencies installed:
-
 ```bash
-python -m venv .venv
-source .venv/bin/activate
-python -m pip install -r requirements.txt
-pytest -q
+pytest
 ruff check .
 mypy financial_accounting_engine
 ```
-
-Restricted environment fallback when dependency installation is blocked:
-
-```bash
-ruff check .
-mypy financial_accounting_engine
-python -m compileall -q financial_accounting_engine tests
-```
-
-`pytest` requires runtime dependencies such as pandas. If those dependencies cannot be installed because the package index or network is blocked, `pytest` may fail during collection; run it locally or in CI once dependencies are available.
 
 ## Accounting and analysis concepts covered
 
