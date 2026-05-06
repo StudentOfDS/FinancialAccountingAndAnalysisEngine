@@ -1,0 +1,4 @@
+transaction_id,date,description,debit_account,credit_account,amount,currency,category,source_document,narration
+T1,2024-01-10,Cash sales,Cash,Sales,5000,USD,sales,INV-1,Cash sale recorded
+T2,2024-01-15,Rent paid,Rent Expense,Cash,1000,USD,rent,RCPT-1,Monthly rent
+T3,2024-02-01,Bought equipment,Equipment,Accounts Payable,3000,USD,machinery,BILL-1,Capital expenditure
