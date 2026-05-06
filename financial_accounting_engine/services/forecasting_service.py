@@ -18,8 +18,8 @@ class ForecastingService:
         derived = _with_derived_metrics(df)
         for metric in [m for m in FORECAST_METRICS if m in derived.columns]:
             series = derived[metric]
-            model, forecast_values, accuracy = select_model(series, periods)
-            interval = residual_interval(series, forecast_values)
+            model, one, accuracy = select_model(series)
+            interval = residual_interval(series, [one[0]] * periods)
             for i, point in enumerate(interval, start=1):
                 rows.append({"metric": metric, "period": f"T+{i}", "model": model, "accuracy": accuracy, "explanation": explain_forecast(metric, model, warning), **point})
         return pd.DataFrame(rows)
